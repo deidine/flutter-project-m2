@@ -80,16 +80,13 @@ return getData;
       print(req.statusCode );
       print(req );
        if (req.statusCode == 201) {
-        // Successfully created
+         
         print('reservetion created successfully');
-        // return 201;
-      } else {
-        // Failed to create
+        
+      } else { 
         print('Failed to create reservation');
-    // return 400;
 
       }
-      // return RegisterResponse.fromJson(req.body);
     } catch (e) {
       throw Exception('Failed to send request');
     }
@@ -118,7 +115,6 @@ return getData;
     });
     print("la reponse du venu${req}");
 
-    // final List<int> data =response.body['data'];
     List<int> getData = [];
     var _extractedData = json.decode(req.body) as List<int>;
     if (_extractedData == null) {}

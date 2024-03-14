@@ -1,3 +1,4 @@
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:get/get.dart';
 import 'package:mapgoog/app/data/enum/venue_category_enum.dart';
 import 'package:mapgoog/app/data/model/venue/venue_response.dart';
@@ -10,6 +11,7 @@ class AllVenueController extends GetxController with StateMixin {
   late List<VenueResponse> venues;
   var filteredVenues = <VenueResponse>[].obs;
   final homeController = Get.find<HomeController>();
+  final refreshController = RefreshController();
 
   @override
   void onInit() {
@@ -53,4 +55,9 @@ class AllVenueController extends GetxController with StateMixin {
     filteredVenues.value =
         venues.where((venue) => venue.category == category).toList();
   }
+void handleRefresh() async {
+    refreshController.requestRefresh();
+    fetchData( );
+    refreshController.refreshCompleted();
+  } 
 }

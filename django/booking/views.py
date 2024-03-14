@@ -17,8 +17,8 @@ def booking_list(request):
         data2 = {
         "venueId": request.data.get('venueId'),
         "userId": request.data.get('userId'),
-        "beginTime": request.data.get('beginTime'),
-        "endTime": request.data.get('endTime'),
+        "beginTime": request.data.get('beginTime'), 
+        "endTime": request.data.get('endTime'), 
         "hours": request.data.get('hours'),
         "bookingTime": request.data.get('bookingTime'),
         "totalPrice": request.data.get('totalPrice'),

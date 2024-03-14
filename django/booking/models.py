@@ -17,3 +17,9 @@ class Booking(models.Model):
     bookingTime = models.DateField( )
     totalPrice = models.IntegerField( )
     status=models.CharField(max_length=23, choices=STUTS)
+    def begin_time(self): 
+        return self.beginTime.strftime('%H:%M')  # Format without seconds
+
+    def end_time(self):
+        return self.endTime.strftime('%H:%M')  # Format without seconds
+ 

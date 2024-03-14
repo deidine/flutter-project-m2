@@ -1,5 +1,5 @@
 abstract class ApiProvider {
-  static const _baseUrl = 'http://192.168.134.215:8000';
+  static const _baseUrl = 'http://192.168.182.215:8000';
   // static const _baseUrl = 'https://603d-193-146-150-220.ngrok-free.app';
 
   static const register ='$_baseUrl/home/create/';

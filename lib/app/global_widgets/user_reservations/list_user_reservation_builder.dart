@@ -63,7 +63,7 @@ class ListUserReservationBuilder extends StatelessWidget {
                         child: Expanded(
                           child:CachedNetworkImage(
                             width: 150,
-                          imageUrl:  "${ApiProvider.imgVenue}${controller.venues![index].idVenue}/",
+                          imageUrl:  "${ApiProvider.imgVenue}${reservations![index].venueId}/",
                             fit: BoxFit.cover,
                           ),
                         )),

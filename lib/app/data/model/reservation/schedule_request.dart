@@ -1,6 +1,6 @@
 class ScheduleRequest {
   int venueId;
-  int date;
+  String date;
   int? txId;
 
   ScheduleRequest({required this.venueId, required this.date, this.txId});

@@ -22,8 +22,8 @@ class ReservationRequesterr {
   Map<String, dynamic> updateReservationToJson() {
     return {
       'idTransaction': idTransaction,
-      'beginTime': beginTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch,
+      'begin_time': beginTime.millisecondsSinceEpoch,
+      'end_time': endTime.millisecondsSinceEpoch,
       'hours': hours,
       'bookingTime': bookingTime.millisecondsSinceEpoch,
       'totalPrice': totalPrice,
@@ -34,8 +34,8 @@ class ReservationRequesterr {
     return {
       'venueId': venueId,
       'userId': userId,
-      'beginTime': beginTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch,
+      'begin_time': beginTime.millisecondsSinceEpoch,
+      'end_time': endTime.millisecondsSinceEpoch,
       'hours': hours,
       'bookingTime': bookingTime.millisecondsSinceEpoch,
       'totalPrice': totalPrice,

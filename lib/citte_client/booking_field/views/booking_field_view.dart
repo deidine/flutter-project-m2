@@ -10,58 +10,78 @@ import '../widgets/time_range_picker_builder.dart';
 
 class BookingFieldView extends GetView<BookingFieldController> {
   const BookingFieldView({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customWhiteAppBar(controller.infoVenue.idVenue.toString()),
-      body: SmartRefresher(
+      appBar: customWhiteAppBar(controller.infoVenue.venueName),
+      body:   SmartRefresher(
         controller: controller.refreshController,
         onRefresh: () => controller.refreshSchedule(false),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DateRangePickerBuilder(
-              calendarHeight: Get.height * 0.44,
-              maxDate: controller.getMaxDateTimeCalendar(),
-              minDate: controller.getCurrentDateTime(),
-              onSelectionChanged: controller.handleUserDatePick,
-              initialDate: controller.getCurrentDateTime(),
-            ),
-             
-            Row(
-                  children: [
-                    CustomActionButton(
-                      backgroundColor: blue,
-                      borderColor: Colors.transparent,
-                      label: 'Select Time',
-                      onTap: () =>   controller.selectTime(), // Call function to show time picker
-                      textColor: pink,
+       child: SingleChildScrollView( child:Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DateRangePickerBuilder(
+                calendarHeight: MediaQuery.of(context).size.height * 0.4,
+                maxDate: controller.getMaxDateTimeCalendar(),
+                minDate: controller.getCurrentDateTime(),
+                onSelectionChanged: controller.handleUserDatePick,
+                initialDate: controller.getCurrentDateTime(),
+              ),
+            const  SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: CustomActionButton(
+                        backgroundColor: blue,
+                        borderColor: Colors.transparent,
+                        label: 'Sélectionner le Temps',
+                        onTap: () => controller.selectTime(),
+                        textColor: Colors.white,
+                      ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ), 
-                  
-            Obx(() {
-              // Use Obx widget to listen to changes in selected time
-              final selectedTime = controller.selectedTime.value;
-              return selectedTime != null 
-                ? Text(
-                    'Selected Time: ${selectedTime.hour}:${selectedTime.minute}',
-                  )
-                : Container();
-            }),],),
-            const TimeRangePickerBuilder(),
-          ],
+                  ),
+                  IconButton(
+                    iconSize: 30,
+                    onPressed: controller.selectTime,
+                    icon: Icon(Icons.timer),
+                  ),
+                  Obx(() {
+                    final selectedTime = controller.selectedTime.value;
+                    return selectedTime != null
+                        ? Text(
+                            '${selectedTime.hour}:${selectedTime.minute}',
+                            style: TextStyle(fontSize: 20),
+                          )
+                        : Container();
+                  }),
+                ],
+              ),
+              const TimeRangePickerBuilder(),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: controller.handleSubmitBookingField,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: blue,
+                  elevation: 20,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                ),
+                child: Text(
+                  'Réserver',
+                  style: TextStyle(
+                    color: Colors.white, // Set the text color to white
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Booking Field',style: TextStyle(color: lightBlue),),
-        icon: const Icon(Icons.ads_click_outlined),
-        
-        backgroundColor: green,
-        onPressed: controller.handleSubmitBookingField,
-      ),
-    );
+    ));
   }
 }

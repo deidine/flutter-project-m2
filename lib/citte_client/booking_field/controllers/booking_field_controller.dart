@@ -11,50 +11,32 @@ import 'package:mapgoog/app/helper/formatted_price.dart';
 import 'package:mapgoog/citte_client/booking_field/widgets/dialog_content.dart';
 import 'package:mapgoog/citte_client/home/controllers/home_controller.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-const millisecondToHour = 3600000;
-
+ 
 class BookingFieldController extends GetxController {
   late final VenueResponse infoVenue;
-  late final bool isEditReservation;
-  late final int transactionId;
-
+  
   final homeController = Get.find<HomeController>();
   final refreshController = RefreshController();
 
-  int userPickDateSinceEpoch = 0;
- late DateTime selectedDateTimeFromCalander ;
-  late List<int> hours;
+  late DateTime selectedDateTimeFromCalander = DateTime.now();
+    List<int> hours=[];
   var temporaryHours = <int>[].obs;
 
   List<int> userHours = [];
+  final DateFormat timeFormat = DateFormat('HH:mm');
+  final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   void onInit() {
-    parsingArgument();
-
+    infoVenue = Get.arguments['infoVenue']; 
+      initalizeHour();
     super.onInit();
   }
-
-  @override
-  void onReady() {
-    initializeDate();
-
-    isEditReservation ? initalizeHourEdit() : initalizeHour();
-
-    super.onReady();
-  }
-
-  void parsingArgument() {
-    infoVenue = Get.arguments['infoVenue'];
-    isEditReservation = Get.arguments['isEditReservation'];
-    transactionId = Get.arguments['transactionId'];
-  }
-
+ 
   Future<void> refreshSchedule(bool isSubmitRequest) async {
     final request = ScheduleRequest(
       venueId: infoVenue.idVenue,
-      date: userPickDateSinceEpoch,
+      date: dateFormat.format(selectedDateTimeFromCalander),
     );
 
     refreshController.requestRefresh();
@@ -69,7 +51,8 @@ class BookingFieldController extends GetxController {
     }
   }
 
-  void handleEditReservation() async {
+  void createReservation() async {
+    var totalPrice = 0;
     int picked = 0;
     if (userHours.length == 3) {
       picked = 2;
@@ -80,75 +63,32 @@ class BookingFieldController extends GetxController {
     if (userHours.length == 1) {
       picked = 0;
     }
-    final DateFormat timeFormat = DateFormat('HH:mm:ss');
-    final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-
-// Format beginTime and endTime
-    final beginTime = timeFormat.format(DateTime.fromMillisecondsSinceEpoch(
-        userPickDateSinceEpoch + userHours[0] * millisecondToHour));
-    final endTime = timeFormat.format(DateTime.fromMillisecondsSinceEpoch(
-        userPickDateSinceEpoch +
-            userHours[userHours.length - 1] * millisecondToHour));
-
-    final bookingTime = dateFormat.format(DateTime.now());
-
-    final totalPrice = infoVenue.pricePerHour * userHours.length;
-    final request = ReservationResponse(
-      transactionId: transactionId,
-      totalPrice: totalPrice,
-      beginTime: beginTime,
-      endTime: endTime,
-      hours: userHours[picked],
-      venueId: infoVenue.idVenue,
-      userId: homeController.dataUser?.idUser,
-      bookingTime: bookingTime,
-    );
-
-    await ReservationService.updateReservation(request).then(
-      (_) {
-        CustomSnackbar.successSnackbar(
-            title: 'Success', message: 'Reservation update succes');
-        refreshSchedule(true);
-      },
-    );
-  }
-
-  void createReservation() async {
-    final DateFormat timeFormat = DateFormat('HH:mm:ss');
-    final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-
- 
-// Format bookingTime
+    if (userHours[picked] == 15) {
+      totalPrice = infoVenue.pricePerHour * 1;
+    }
+    if (userHours[picked] == 30) {
+      totalPrice = infoVenue.pricePerHour * 2;
+    }
+    if (userHours[picked] == 45) {
+      totalPrice = infoVenue.pricePerHour * 3;
+    }
+    if (userHours[picked] == 60) {
+      totalPrice = infoVenue.pricePerHour * 4;
+    }
+    if (userHours[picked] == 75) {
+      totalPrice = infoVenue.pricePerHour * 5;
+    }
+    final selectedTimeq = selectedTime.value;
     final bookingTime = dateFormat.format(selectedDateTimeFromCalander);
 
-    var totalPrice=0;
-    int picked = 0;
-    if (userHours.length == 3) {
-      picked = 2;
-    }
-    if (userHours.length == 2) {
-      picked = 1;
+    final endTime2 = timeFormat.format(DateTime(
+      0, // Year
+      0, // Month
+      0, // Day
+      selectedTimeq!.hour,
+      selectedTimeq.minute + userHours[picked],
+    ));
 
-    }
-    if (userHours.length == 1) {
-      picked = 0;
-
-    }
-    if(userHours[picked]==15){totalPrice = infoVenue.pricePerHour * 1;}
-    if(userHours[picked]==30){totalPrice = infoVenue.pricePerHour * 2;}
-    if(userHours[picked]==45){totalPrice = infoVenue.pricePerHour * 3;}
-    if(userHours[picked]==60){totalPrice = infoVenue.pricePerHour * 4;}
-    if(userHours[picked]==75){totalPrice = infoVenue.pricePerHour * 5;}
-      final selectedTimeq = selectedTime.value;
-
-  // Calculate end time by adding user selected hours to the selected time
-  final endTime2 = timeFormat.format(DateTime(
-    0, // Year
-    0, // Month
-    0, // Day
-    selectedTimeq!.hour,
-    selectedTimeq.minute + userHours[picked],
-  ));
     final request = ReservationResponse(
       totalPrice: totalPrice,
       beginTime: "${selectedTimeq.hour}:${selectedTimeq.minute}",
@@ -177,7 +117,7 @@ class BookingFieldController extends GetxController {
     await ReservationService.createReservation(request).then(
       (_) {
         CustomSnackbar.successSnackbar(
-            title: 'Success', message: 'Reservation process succes');
+            title: 'Success', message: 'Succès du processus de réservation');
         refreshSchedule(true);
       },
     );
@@ -187,51 +127,23 @@ class BookingFieldController extends GetxController {
     if (userHours.isEmpty) {
       CustomSnackbar.failedSnackbar(
         title: 'Error',
-        message: 'Please select time',
+        message: 'S\'il vous plaît sélectionner l\'heure',
       );
       return;
     }
 
     userHours.sort();
 
-    if (isEditReservation) {
-      handleEditReservation();
-      return;
-    }
-
     createReservation();
-  }
-
-  void initializeDate() {
-    final now = getCurrentDateTime();
-    final pureDate = DateTime(now.year, now.month, now.day);
-    userPickDateSinceEpoch = pureDate.millisecondsSinceEpoch;
   }
 
   void initalizeHour() async {
     final request = ScheduleRequest(
       venueId: infoVenue.idVenue,
-      date: userPickDateSinceEpoch,
+      date: dateFormat.format(selectedDateTimeFromCalander),
     );
     refreshController.requestRefresh();
     hours = await ReservationService.getSchedule(request).then((value) {
-      refreshController.refreshCompleted();
-      return value;
-    });
-
-    temporaryHours.value = [...hours];
-  }
-
-  void initalizeHourEdit() async {
-    final request = ScheduleRequest(
-      venueId: infoVenue.idVenue,
-      date: userPickDateSinceEpoch,
-      txId: transactionId,
-    );
-
-    refreshController.requestRefresh();
-    hours =
-        await ReservationService.getScheduleExcludeTxId(request).then((value) {
       refreshController.refreshCompleted();
       return value;
     });
@@ -300,17 +212,14 @@ class BookingFieldController extends GetxController {
 
   void handleUserDatePick(
       DateRangePickerSelectionChangedArgs selectedDate) async {
-    DateTime selectedDateTime = selectedDate.value;
-    selectedDateTimeFromCalander= selectedDate.value;
-    userPickDateSinceEpoch = selectedDateTime.millisecondsSinceEpoch;
+    selectedDateTimeFromCalander = selectedDate.value;
 
     final request = ScheduleRequest(
-        venueId: infoVenue.idVenue, date: userPickDateSinceEpoch);
+        venueId: infoVenue.idVenue,
+        date: dateFormat.format(selectedDateTimeFromCalander));
 
     refreshController.requestRefresh();
-    hours = (isEditReservation)
-        ? await ReservationService.getScheduleExcludeTxId(request)
-        : await ReservationService.getSchedule(request);
+    hours = await ReservationService.getSchedule(request);
 
     temporaryHours.value = [...hours];
     refreshController.refreshCompleted();
@@ -323,10 +232,6 @@ class BookingFieldController extends GetxController {
   DateTime getMaxDateTimeCalendar() => DateTime.now().add(
         const Duration(days: 90),
       );
-
-
-
-
 
   Rx<TimeOfDay?> selectedTime = Rx<TimeOfDay?>(null);
 
@@ -348,7 +253,4 @@ class BookingFieldController extends GetxController {
       );
     });
   }
-
-  // Getter method to access the selected time
- 
 }

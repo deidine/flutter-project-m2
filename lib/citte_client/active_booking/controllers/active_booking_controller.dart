@@ -1,4 +1,3 @@
-import 'package:mapgoog/citte_client/payment/views/payment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -6,7 +5,6 @@ import 'package:mapgoog/app/data/enum/venue_category_enum.dart';
 import 'package:mapgoog/app/data/model/user/user_response.dart';
 import 'package:mapgoog/app/data/model/venue/venue_response.dart';
 import 'package:mapgoog/app/data/service/reservation_service.dart';
-import 'package:mapgoog/app/data/service/user_service.dart';
 import 'package:mapgoog/citte_client/all_venue/controllers/all_venue_controller.dart';
 import 'package:mapgoog/citte_client/home/controllers/home_controller.dart';
 import 'package:mapgoog/app/routes/app_pages.dart';
@@ -34,7 +32,7 @@ class ActiveBookingController extends GetxController with StateMixin {
   }
 
   void handlePaymentReservation(UserReservation reservation) {
-    // venue response
+   
     final VenueResponse infoVenue = VenueResponse(
       idVenue: reservation.venueId,
       location: '',
