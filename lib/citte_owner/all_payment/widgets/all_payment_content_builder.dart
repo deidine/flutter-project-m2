@@ -58,7 +58,7 @@ class AllVenueContentBuilder extends GetView<AllpaymentOwnerController> {
                           style: smallText,
                         ),
                         Text(
-                          "${controller.payments![index].phone}",
+                          "${controller.payments![index].pymtTime}",
                         ),
                         const SizedBox(
                           height: 10,
@@ -66,7 +66,7 @@ class AllVenueContentBuilder extends GetView<AllpaymentOwnerController> {
                         Row(
                           children: [
                             const Icon(
-                              Icons.pin_drop_sharp,
+                              Icons.attach_money,
                               color: blue,
                               size: 14,
                             ),
@@ -79,7 +79,7 @@ class AllVenueContentBuilder extends GetView<AllpaymentOwnerController> {
                         Row(
                           children: [
                             const Icon(
-                              Icons.attach_money,
+                              Icons.phone,
                               color: blue,
                               size: 14,
                             ),

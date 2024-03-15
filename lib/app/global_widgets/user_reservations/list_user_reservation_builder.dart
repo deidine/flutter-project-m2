@@ -19,16 +19,17 @@ class ListUserReservationBuilder extends StatelessWidget {
   final List<UserReservation> reservations;
   final bool isUsingCustomActionButton;
 
-  final void Function(String)? cancelFunction;
+  final void Function(int)? cancelFunction;
   final void Function(UserReservation)? paymentFunction;
 
-    ListUserReservationBuilder({
+  ListUserReservationBuilder({
     Key? key,
     required this.reservations,
     required this.isUsingCustomActionButton,
     this.paymentFunction,
     this.cancelFunction,
   }) : super(key: key);
+  
   final AllVenueController controller = Get.find<AllVenueController>();
 
   @override
@@ -47,7 +48,7 @@ class ListUserReservationBuilder extends StatelessWidget {
             childrenPadding: const EdgeInsets.all(8),
             textColor: Colors.black,
             title: Text(
-              'Booking Id:${reservations[index].transactionId}',
+              'Identifiant de la réservation : ${reservations[index].transactionId}',
               style: smallText,
             ),
             subtitle: SubtitleUserReservationBuilder(
@@ -59,28 +60,26 @@ class ListUserReservationBuilder extends StatelessWidget {
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Expanded(
-                          child:CachedNetworkImage(
-                            width: 150,
-                          imageUrl:  "${ApiProvider.imgVenue}${reservations![index].venueId}/",
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-              // UserReservationImageBuilder(url: reservations[index].imageLink),
+                borderRadius: BorderRadius.circular(5),
+                child: Expanded(
+                  child: CachedNetworkImage(
+                    width: 150,
+                    imageUrl: "${ApiProvider.imgVenue}${reservations![index].venueId}/",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 8,
               ),
               UserReservationBookingDateBuilder(
-                date:  
-                  reservations[index].bookingTime  ,
-                
+                date: (reservations[index].bookingTime),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Price',
+                'Prix',
                 style: textfieldText.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -93,24 +92,23 @@ class ListUserReservationBuilder extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-         
               Text(
-                'Schedule',
+                'Horaire',
                 style: textfieldText.copyWith(
                   fontWeight: FontWeight.w600,
-                ),),
+                ),
+              ),
               const SizedBox(
                 height: 4,
               ),
               UserReservationScheduleBuilder(
-                date: 
-                  reservations[index].playTime ,
-               ),
+                date: (reservations[index].playTime),
+              ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Play hours',
+                'Heures de jeu',
                 style: textfieldText.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

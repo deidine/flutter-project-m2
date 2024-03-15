@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapgoog/app/data/service/booking_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mapgoog/app/data/enum/venue_category_enum.dart';
 import 'package:mapgoog/app/data/model/user/user_response.dart';
@@ -58,19 +59,22 @@ print("deidine payment");
     Get.toNamed(Routes.PAYMENT , arguments: arguments);
   }
 
-  void handleCancelReservation(String transactionId) {
-    Get.defaultDialog(
-      title: 'Cancel Reservation',
-      middleText: 'Are you sure you want to cancel this reservation?',
-      onConfirm: () => requestCancelReservation(transactionId),
-      textConfirm: 'Yes',
-      confirmTextColor: Colors.white,
-      textCancel: 'Cancel',
-    );
-  }
+ 
 
-  void requestCancelReservation(String transactionId) {
-    ReservationService.cancelReservation(transactionId).then((_) {
+   
+  void handleCancelReservation(int transactionId) { 
+   Get.defaultDialog(
+    title: 'Annuler la réservation',
+    middleText: 'Êtes-vous sûr de vouloir annuler cette réservation ?',
+    onConfirm: () => requestCancelReservation(transactionId),
+    textConfirm: 'Oui',
+    confirmTextColor: Colors.white,
+    textCancel: 'Annuler',
+  );
+  }
+   
+  Future<void> requestCancelReservation(int transactionId) async {
+   await BookingService.delete(transactionId!).then((_) {
       Get.back();
 
       CustomSnackbar.successSnackbar(

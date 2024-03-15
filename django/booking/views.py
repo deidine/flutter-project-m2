@@ -1,3 +1,5 @@
+from django.utils import timezone
+from .models import Booking
 import datetime
 from django.http import JsonResponse
 from rest_framework import status
@@ -25,8 +27,25 @@ def booking_list(request):
         # "transactionId": 1,
         "status":"invalid"
     } 
-        
-        print(data2)
+        bookings_within_range = Booking.objects.filter(venueId= request.data.get('venueId'), 
+                                                       bookingTime=request.data.get('bookingTime'),
+                                                       beginTime__gte=request.data.get('beginTime'),
+                                                     
+                                                       status="valid")
+        bookings_within_range2 = Booking.objects.filter(venueId= request.data.get('venueId'), 
+                                                       bookingTime=request.data.get('bookingTime'),
+                                                       endTime__lte=request.data.get('endTime'),
+                                                       status="valid")        
+        bookings_within_range3 = Booking.objects.filter(venueId= request.data.get('venueId'), 
+                                                       bookingTime=request.data.get('bookingTime'),
+                                                    beginTime=request.data.get('beginTime'), 
+                                                        status="valid")
+        if bookings_within_range or bookings_within_range2 or bookings_within_range3 :
+            print("The requested time slot overlaps with existing bookings")
+            return Response("The requested time slot overlaps with existing bookings", status=status.HTTP_400_BAD_REQUEST)
+    
+    
+        print(bookings_within_range)
         serializer = BookingSerializer(data=data2)
         # print(serializer)
         print(serializer.is_valid())
@@ -178,3 +197,54 @@ def search_bookings(request):
 
     # Return the serialized data as JSON response
     return JsonResponse(serializer.data, safe=False)
+ 
+from datetime import datetime, time
+def timeBetween(request):
+    begin = request.GET.get('begin')
+    date = request.GET.get('date')
+    end = request.GET.get('end')
+    venueId=request.GET.get('venueId') 
+
+
+    # if begin ==None and end==None:
+    #     bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date, status="valid")
+    #     print("vide")
+    # else:
+    #     bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date, beginTime=begin, endTime=end,status="valid")
+    # bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date,beginTime__gte=begin, endTime__lte=end,status="valid")
+    bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date, status="valid")
+    
+    serializer = BookingSerializer(bookings_within_range, many=True)    
+    return JsonResponse(serializer.data, safe=False)
+ 
+#  from datetime import datetime, time
+# def timeBetween(request):
+#     begin = request.GET.get('begin')
+#     date = request.GET.get('date')
+#     end = request.GET.get('end')
+#     venueId=request.GET.get('venueId') 
+
+#     check = request.GET.get('check')
+#     begin_time = datetime.strptime(begin, '%H:%M').time()
+#     end_time = datetime.strptime(end, '%H:%M').time()
+#     check_time = datetime.strptime(check, '%H:%M').time()
+
+#     if begin_time <= check_time <= end_time:
+#         print(True)
+
+#     elif begin_time > end_time:
+#         print(check_time >= begin_time or check_time <= end_time)
+#     else:
+#         print(False)
+
+#     if begin ==None and end==None:
+#         bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date, status="valid")
+#         print("vide")
+#     else:
+#         bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date, beginTime=begin, endTime=end,status="valid")
+#     # bookings_within_range = Booking.objects.filter(venueId=venueId, bookingTime=date,beginTime__gte=begin, endTime__lte=end,status="valid")
+    
+#     serializer = BookingSerializer(bookings_within_range, many=True)    
+#     return JsonResponse(serializer.data, safe=False)
+ 
+ 

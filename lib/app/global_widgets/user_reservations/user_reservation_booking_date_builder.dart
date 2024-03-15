@@ -15,7 +15,7 @@ class UserReservationBookingDateBuilder extends StatelessWidget {
     return Row(
       children: [
         Text(
-          'Booking',
+          'Reservation',
           style: textfieldText.copyWith(
             fontWeight: FontWeight.w600,
           ),

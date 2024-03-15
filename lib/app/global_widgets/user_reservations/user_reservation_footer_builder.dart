@@ -18,7 +18,7 @@ class UserReservationFooterBuilder extends StatelessWidget {
 
   final int hours;
   final bool isUsingCustomActionButton;
-  final void Function(String)? cancelFunction;
+  final void Function(int)? cancelFunction;
   final void Function(UserReservation)? paymentFunction;
   final int transactionId;
   final UserReservation reservation;
@@ -56,8 +56,8 @@ class UserReservationFooterBuilder extends StatelessWidget {
                     CustomActionButton(
                       backgroundColor: red,
                       borderColor: Colors.transparent,
-                      label: 'Cancel',
-                      onTap: () => cancelFunction!(transactionId as String),
+                      label: 'Anuller',
+                      onTap: () => cancelFunction!(transactionId  ),
                       textColor: Colors.white,
                     ),
                   ],

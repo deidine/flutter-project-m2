@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mapgoog/app/core/themes/font_themes.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mapgoog/app/core/values/colors.dart';
 import 'package:mapgoog/app/global_widgets/custom_white_appbar.dart';
@@ -13,7 +14,16 @@ class BookingFieldView extends GetView<BookingFieldController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Réserver',style: TextStyle(color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w500,),),
+        icon: const Icon(Icons.ads_click_outlined),
+        elevation: 60,
+        backgroundColor: green,
+        onPressed: controller.handleSubmitBookingField,
+      ),
         appBar: customWhiteAppBar(controller.infoVenue.venueName),
         body: SmartRefresher(
           controller: controller.refreshController,
@@ -65,21 +75,22 @@ class BookingFieldView extends GetView<BookingFieldController> {
                   const TimeRangePickerBuilder(),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: controller.handleSubmitBookingField,
+                    onPressed: controller.showSchedule,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: blue,
+                      backgroundColor: softGreen,
                       elevation: 20,
                       padding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 40),
                     ),
                     child: Text(
-                      'Réserver',
-                      style: TextStyle(
-                        color: Colors.white, // Set the text color to white
+                      'Afficher les bookings',
+                      style: TextStyle(fontWeight: FontWeight.bold,
+                        color: Colors.black, // Set the text color to white
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
+                 
                 ],
               ),
             ),

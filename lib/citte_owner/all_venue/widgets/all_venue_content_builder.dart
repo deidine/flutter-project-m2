@@ -94,7 +94,7 @@ class AllVenueContentBuilder extends GetView<AllVenueOwnerController> {
                           backgroundColor: Colors.red,
                           borderColor: Colors.black,
                           textColor: Colors.white,
-                          label: "delete",
+                          label: "Suprimer",
                           onTap: () {
                             controller.deletedId =
                                 controller.venues![index].idVenue;

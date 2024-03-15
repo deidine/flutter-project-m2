@@ -2,6 +2,7 @@ import 'package:mapgoog/app/data/model/reservation/reservation_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mapgoog/citte_client/booking_field/widgets/dialog_schedule.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mapgoog/app/core/themes/custom_snackbar_theme.dart';
 import 'package:mapgoog/app/data/model/reservation/schedule_request.dart';
@@ -11,15 +12,16 @@ import 'package:mapgoog/app/helper/formatted_price.dart';
 import 'package:mapgoog/citte_client/booking_field/widgets/dialog_content.dart';
 import 'package:mapgoog/citte_client/home/controllers/home_controller.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
- 
+
 class BookingFieldController extends GetxController {
   late final VenueResponse infoVenue;
-  
+  // final List<VenueResponse> data =response.body['data'];
+  late List<ReservationResponse> schedledData = [];
   final homeController = Get.find<HomeController>();
   final refreshController = RefreshController();
 
   late DateTime selectedDateTimeFromCalander = DateTime.now();
-    List<int> hours=[];
+  List<int> hours = [];
   var temporaryHours = <int>[].obs;
 
   List<int> userHours = [];
@@ -28,23 +30,12 @@ class BookingFieldController extends GetxController {
 
   @override
   void onInit() {
-    infoVenue = Get.arguments['infoVenue']; 
-      initalizeHour();
+    infoVenue = Get.arguments['infoVenue'];
     super.onInit();
   }
- 
+
   Future<void> refreshSchedule(bool isSubmitRequest) async {
-    final request = ScheduleRequest(
-      venueId: infoVenue.idVenue,
-      date: dateFormat.format(selectedDateTimeFromCalander),
-    );
-
-    refreshController.requestRefresh();
-    hours = await ReservationService.getSchedule(request).then((value) {
-      refreshController.refreshCompleted();
-      return value;
-    });
-
+    hours = [];
     if (!isSubmitRequest) {
       temporaryHours.value = [...hours];
       userHours.clear();
@@ -105,22 +96,15 @@ class BookingFieldController extends GetxController {
       totalHour: userHours[picked].toString(),
       totalPrice: 'Rp. ${getFormattedPrice(totalPrice)}',
       onConfirm: () {
+        // getSchedule(
+        //     "${selectedTimeq.hour}:${selectedTimeq.minute}", endTime2, request);
+
         createReservationRequest(request);
+
         Get.back();
       },
     );
-
     showOrderDialogSummary(dialogModel);
-  }
-
-  void createReservationRequest(ReservationResponse request) async {
-    await ReservationService.createReservation(request).then(
-      (_) {
-        CustomSnackbar.successSnackbar(
-            title: 'Success', message: 'Succès du processus de réservation');
-        refreshSchedule(true);
-      },
-    );
   }
 
   void handleSubmitBookingField() async {
@@ -135,20 +119,6 @@ class BookingFieldController extends GetxController {
     userHours.sort();
 
     createReservation();
-  }
-
-  void initalizeHour() async {
-    final request = ScheduleRequest(
-      venueId: infoVenue.idVenue,
-      date: dateFormat.format(selectedDateTimeFromCalander),
-    );
-    refreshController.requestRefresh();
-    hours = await ReservationService.getSchedule(request).then((value) {
-      refreshController.refreshCompleted();
-      return value;
-    });
-
-    temporaryHours.value = [...hours];
   }
 
   void handleUserTimePick(int inputHour) {
@@ -214,15 +184,8 @@ class BookingFieldController extends GetxController {
       DateRangePickerSelectionChangedArgs selectedDate) async {
     selectedDateTimeFromCalander = selectedDate.value;
 
-    final request = ScheduleRequest(
-        venueId: infoVenue.idVenue,
-        date: dateFormat.format(selectedDateTimeFromCalander));
-
-    refreshController.requestRefresh();
-    hours = await ReservationService.getSchedule(request);
-
+    hours = [];
     temporaryHours.value = [...hours];
-    refreshController.refreshCompleted();
 
     userHours.clear();
   }
@@ -252,5 +215,53 @@ class BookingFieldController extends GetxController {
         message: 'Failed to pick time: $error',
       );
     });
+  }
+
+  Future<void> getSchedule() async {
+    final request = ScheduleRequest(
+      venueId: infoVenue.idVenue,
+      // begin: begin,
+      // end: end,
+      date: dateFormat.format(selectedDateTimeFromCalander),
+    );
+    refreshController.requestRefresh();
+    schedledData = await ReservationService.getSchedule(request).then((value) {
+      refreshController.refreshCompleted();
+      return value;
+    });
+    print("deidine$schedledData");
+    List<DialogScheduleModel> listSchedule = [];
+    for (var data in schedledData) {
+      listSchedule.add(DialogScheduleModel(
+          begin: data.beginTime,
+          end: data.endTime,
+          date: dateFormat.format(selectedDateTimeFromCalander),
+          venueName: infoVenue.venueName));
+    }
+
+    Get.dialog(
+      OrderDialogScheduleSummary(model: listSchedule),
+    );
+  }
+
+  void createReservationRequest(ReservationResponse request) async {
+    // if (schedledData.isEmpty) {
+    await ReservationService.createReservation(request).then(
+      (_) {
+        CustomSnackbar.successSnackbar(
+          title: 'Success',
+          message: 'Reservation process successful',
+        );
+        refreshSchedule(true);
+      },
+    );
+    // the time betwen end and begin
+    // } else {
+    //   print("There are conflicts in the schedule");
+    // }
+  }
+
+  void showSchedule() {
+    getSchedule();
   }
 }

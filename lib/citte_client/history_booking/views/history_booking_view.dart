@@ -16,7 +16,7 @@ class HistoryBookingView extends GetView<HistoryBookingController> {
     return Scaffold(
       drawer:GlobalDrawer(),
 
-      appBar: customWhiteAppBar('Booking History'),
+      appBar: customWhiteAppBar('Champs réservés'),
       body: SmartRefresher(
         controller: controller.refreshController,
         onRefresh: controller.handleRefresh,

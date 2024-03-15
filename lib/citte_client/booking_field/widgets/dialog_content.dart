@@ -22,7 +22,7 @@ class DialogContentModel {
 
 void showOrderDialogSummary(DialogContentModel model) {
   Get.defaultDialog(
-    title: 'Booking Summary',
+    title: 'Résumé de la réservation',
     titleStyle: smallText.copyWith(color: orange),
     content: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -40,7 +40,7 @@ void showOrderDialogSummary(DialogContentModel model) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Price: ',
+                'Prix : ',
                 style: textfieldText.copyWith(fontSize: 15),
               ),
               Text(
@@ -53,7 +53,7 @@ void showOrderDialogSummary(DialogContentModel model) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Min: ',
+                'Durée totale : ',
                 style: textfieldText.copyWith(fontSize: 15),
               ),
               Text(
@@ -66,7 +66,7 @@ void showOrderDialogSummary(DialogContentModel model) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Price: ',
+                'Prix total : ',
                 style: textfieldText.copyWith(fontSize: 15),
               ),
               Text(
@@ -79,8 +79,8 @@ void showOrderDialogSummary(DialogContentModel model) {
       ),
     ),
     onConfirm: model.onConfirm,
-    textConfirm: 'Book',
-    textCancel: 'Cancel',
+    textConfirm: 'Réserver',
+    textCancel: 'Annuler',
     confirmTextColor: Colors.white,
   );
 }

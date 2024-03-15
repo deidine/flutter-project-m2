@@ -5,7 +5,7 @@ import '../model/reservation/reservation_response.dart';
 import '../model/reservation/schedule_request.dart';
 
 abstract class ReservationService {
-  static Future<List<int>> getSchedule(ScheduleRequest request) async {
+  static Future<List<ReservationResponse>> getSchedule(ScheduleRequest request) async {
     return await ReservationRepository.getSchedule(request);
   }
 

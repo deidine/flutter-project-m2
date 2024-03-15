@@ -22,7 +22,7 @@ class UserReservationPriceInformation extends StatelessWidget {
           style: subtitle1.copyWith(color: blue, fontSize: 20),
         ),
         Text(
-          '/hour',
+          '/15 min',
           style: smallText.copyWith(fontSize: 10),
         )
       ],

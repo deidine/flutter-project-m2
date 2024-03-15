@@ -6,44 +6,37 @@ import 'package:get/get.dart';
 import 'package:mapgoog/app/data/model/reservation/reservation_response.dart';
 import 'package:mapgoog/app/data/model/reservation/schedule_request.dart';
 import 'package:mapgoog/app/data/provider/api_provider.dart';
- 
+
 abstract class ReservationRepository {
   static final getConnect = GetConnect();
 
-  static Future<List<int>> getSchedule(ScheduleRequest request) async {
-     
+  static Future<List<ReservationResponse>> getSchedule(
+      ScheduleRequest request) async {
     print("booking function$request");
-  
+
     // return req.body['data'].cast<int>();
 
-  var url =
-        Uri.parse('${ApiProvider.getSchedule}?venue=${request.venueId}&date=${request.date}');
+    var url = Uri.parse(
+        '${ApiProvider.getSchedule}?venueId=${request.venueId}&date=${request.date}');
+        // '${ApiProvider.getSchedule}?venueId=${request.venueId}&date=${request.date}&begin=${request.begin}&end=${request.end}');
 
     final req = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
-    List<int> getData = [];
-
-// Decode the JSON response body
-var _extractedData = json.decode(req.body);
-
-// Check if the decoded data is not null and is a map
-if (_extractedData != null && _extractedData is Map<String, dynamic>) {
-  // Extract the 'hours' field from the decoded data
-  dynamic hoursData = _extractedData['hours'];
-  
-  // Check if the 'hours' field is not null and is an int
-  if (hoursData != null && hoursData is int) {
-    getData.add(hoursData); // Add the 'hours' value to the list
+    // final List<VenueResponse> data =response.body['data'];
+    List<ReservationResponse> getData = [];
+    var _extractedData = json.decode(req.body) as List;
+    if (_extractedData == null) {}
+    getData = _extractedData
+        .map<ReservationResponse>((json) => ReservationResponse.fromJson(json))
+        .toList();
+    print("je suios od");
+    return getData;
   }
-}
-
-return getData;
-    }
 
   static Future<List<ReservationResponse>> getReservationListByUserId(
       int userId) async {
-    var url= Uri.parse('${ApiProvider.getReservationById}$userId/');
+    var url = Uri.parse('${ApiProvider.getReservationById}$userId/');
 
     final response = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -58,7 +51,7 @@ return getData;
         .map<ReservationResponse>((json) => ReservationResponse.fromJson(json))
         .toList();
     print("je suios od");
-    return getData; 
+    return getData;
   }
 
   static Future<void> cancelReservation(String idTransaction) async {
@@ -72,20 +65,17 @@ return getData;
   }
 
   static Future<void> createReservation(ReservationResponse request) async {
- 
-     Response<dynamic> req;
+    Response<dynamic> req;
 
     try {
-      req = await getConnect.post(ApiProvider.createReservation, request.createReservationToJson());
-      print(req.statusCode );
-      print(req );
-       if (req.statusCode == 201) {
-         
+      req = await getConnect.post(
+          ApiProvider.createReservation, request.createReservationToJson());
+      print(req.statusCode);
+      print(req);
+      if (req.statusCode == 201) {
         print('reservetion created successfully');
-        
-      } else { 
+      } else {
         print('Failed to create reservation');
-
       }
     } catch (e) {
       throw Exception('Failed to send request');
@@ -103,12 +93,10 @@ return getData;
 
   static Future<List<int>> getScheduleExcludeTxId(
       ScheduleRequest request) async {
-     
-     
-  //   return req.body['data'].cast<int>();
-  // }
-     var url =
-        Uri.parse('${ApiProvider.getScheduleExcludeTxId}?venue=${request.venueId}&date=${request.date}&txId=${request.txId}');
+    //   return req.body['data'].cast<int>();
+    // }
+    var url = Uri.parse(
+        '${ApiProvider.getSchedule}?venueId=${request.venueId}&date=${request.date}&begin=${request.begin}&end=${request.end}');
 
     final req = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -121,7 +109,5 @@ return getData;
     getData = _extractedData.toList();
     print("je suios od$getData");
     return getData;
- 
-}
-
+  }
 }

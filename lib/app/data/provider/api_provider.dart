@@ -12,7 +12,7 @@ abstract class ApiProvider {
   static const updateUser = '$_baseUrl/home/api/employees/update/'; // {userId}
  
   static const getSchedule = 
-      '$_baseUrl/api/bookings/'; // ?venue={venueId}&date={date}
+      '$_baseUrl/api/schedule/'; // ?venue={venueId}&date={date}
   static const getReservationById = '$_baseUrl/api/bookings/'; // /{userId}
   static const getReservationByVenueId = '$_baseUrl/api/bookings/venue/'; // /{userId}
   static const base = _baseUrl; // /{userId}

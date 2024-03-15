@@ -16,7 +16,7 @@ class AllOwnerpayment extends GetView<AllpaymentOwnerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: customWhiteAppBar('Explore'),
+        appBar: customWhiteAppBar('Payments'),
         drawer: GlobalDrawerOwner(),
         body: SmartRefresher(
             controller: controller.refreshController,

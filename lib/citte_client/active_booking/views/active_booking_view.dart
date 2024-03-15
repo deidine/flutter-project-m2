@@ -16,7 +16,7 @@ class ActiveBookingView extends GetView<ActiveBookingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customWhiteAppBar('Booked Fields'),
+      appBar: customWhiteAppBar('Champs réservés'),
       drawer:GlobalDrawer(),
       body: SmartRefresher(
         controller: controller.refreshController,
