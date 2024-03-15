@@ -8,6 +8,7 @@ class MapView extends GetView<MapController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:AppBar(),
       body: SafeArea(
           child: Obx(
         () => controller.mapModel.isNotEmpty

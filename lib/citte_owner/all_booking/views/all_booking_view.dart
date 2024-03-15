@@ -55,6 +55,7 @@ class AllBookingView extends GetView<AllBookingController> {
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
+                      
                       AllBookingContentBuilder(),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mapgoog/app/core/themes/custom_snackbar_theme.dart';
 import 'package:mapgoog/app/data/model/reservation/reservation_response.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:mapgoog/app/data/enum/venue_category_enum.dart';
 import 'package:mapgoog/app/data/model/venue/venue_response.dart';
 import 'package:mapgoog/app/routes/app_pages.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../owner_home/controllers/home_owner_controller.dart';
 
@@ -14,14 +16,17 @@ class AllBookingController extends GetxController with StateMixin {
   final refreshController = RefreshController();
   late final VenueResponse infoVenue;
 
-  late List<VenueResponse> venues;
+  late DateTime selectedDateTimeFromCalander = DateTime.now();
   var bookings=<ReservationResponse>[].obs;
+  var bookingPerdate=<ReservationResponse>[].obs;
   var filteredVenues = <VenueResponse>[].obs;
   final homeController = Get.find<HomeOwnerController>();
   // var bookings = <ReservationResponse>[].obs;
   late List<UserResponse>? dataUsers;
   late final venuId;
   late UserResponse user;
+  final DateFormat timeFormat = DateFormat('HH:mm');
+  final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   void onInit() {
@@ -81,17 +86,12 @@ class AllBookingController extends GetxController with StateMixin {
     };
     Get.toNamed(Routes.ALL_PAYMENT, arguments: arguments);
   }
-
-  void initializeFilteredVenues() {
-    filteredVenues.value = venues
-        .where((venue) => venue.category == VenueCategory.footbal)
-        .toList();
-  }
+ 
 
   void fetchUserData() async {
     change(false, status: RxStatus.loading());
     dataUsers = await BookingService.getReservationListByUser();
-    initializeFilteredVenues();
+    
     change(true, status: RxStatus.success());
   }
 
@@ -197,4 +197,25 @@ class AllBookingController extends GetxController with StateMixin {
     };
     Get.toNamed(Routes.BOOKING_DETAIL, arguments: arguments);
   }
+
+ DateTime getCurrentDateTime() => DateTime.now().subtract( const Duration(days: 90),);
+
+  DateTime getMaxDateTimeCalendar() => DateTime.now().add(
+        const Duration(days: 90),
+      );
+   void handleUserDatePick(
+      DateRangePickerSelectionChangedArgs selectedDate) async {
+    selectedDateTimeFromCalander = selectedDate.value;
+
+  
+    // refreshController.requestRefresh();
+
+bookingPerdate.value=bookings
+        .where((booking) => booking.bookingTime == dateFormat.format(selectedDateTimeFromCalander))
+        .toList();
+print("$bookingPerdate ${dateFormat.format(selectedDateTimeFromCalander)}");
+    // refreshController.refreshCompleted();
+ 
+  }
+
 }

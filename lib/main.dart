@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:mapgoog/citte_client/onboarding/views/introduction_screen.dart';
-
+// import 'use.dart';
 import 'app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +18,8 @@ import 'package:flutter/material.dart';
 //       theme: ThemeData(
 //         primarySwatch: Colors.blue,
 //       ),
-//       home: OnBoardingPage(),
-//     );
+//       home: TransferItem(Transfer(lastUpdate: 12,playerId: 1,playerName: "deind",teamIn: TeamIn(teamId: 1,teamName: "deinde")), 1));
+     
 //   }
 // }
 
