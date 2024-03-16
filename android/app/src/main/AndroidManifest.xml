@@ -10,10 +10,10 @@
         <!-- there apu -->
         <!-- <meta-data 
         android:name="com.google.android.geo.API_KEY"  
-        android:value="AIzaSyALIxrIE1umNb-lCu4WfXqdbdFspCpvsUE"/>  -->
+        android:value="AIzaSyALIxrIE1umNb-lCu4WfXqdbdFspCpv"/>  -->
         <!-- my api -->
         <meta-data android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAguu37xo4S6WenFvIF6xOaeWJfhEtn7t4"/>
+        android:value="AIzaSyAguu37xo4S6WenFvIF6xOaeWJfhEtn"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
