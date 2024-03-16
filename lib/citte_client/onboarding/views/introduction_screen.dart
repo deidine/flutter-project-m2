@@ -14,7 +14,7 @@ class OnBoardingPage  extends GetView<OnboardingController> {
   }
 
   Widget _buildImage(String assetName, [double width = 400]) {
-    return Image.asset( heroOnboardingImage, width: width);
+    return Image.asset( 'assets/$assetName', width: width);
   }
 
   @override
@@ -38,7 +38,7 @@ class OnBoardingPage  extends GetView<OnboardingController> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 16, right: 16),
-            child: _buildImage('logo.png', 60),
+            child: _buildImage('logo.jpeg', 60),
           ),
         ),
       ),
@@ -49,7 +49,7 @@ class OnBoardingPage  extends GetView<OnboardingController> {
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.orange)),
           child: const Text(
-            'Let\'s go right away!',
+            'Commencer dès maintenant !',
             style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
           onPressed: () => _onIntroEnd(context),
@@ -57,25 +57,25 @@ class OnBoardingPage  extends GetView<OnboardingController> {
       ),
       pages: [
         PageViewModel(
-          title: "Welcome to a world of new possibilities!",
+          title: "Bienvenue dans un monde de nouvelles possibilités !",
           body: "",
-          image: _buildImage('Dream_jobs.jpg'),
+          image: _buildImage('hero_onboarding.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(      
+              title: "Débloquez des opportunités infinies",
+          body: "Restez à jour avec les dernières matches",
+          image: _buildImage('2.jpg'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Unlock Endless opportunities",
-          body: "Stay up-to-date with the latest job postings",
-          image: _buildImage('opportunities.jpg'),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "getJOBS get the job done!",
+          title: "CITEK réalisez votre travail !",
           bodyWidget: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children:   [
-              Text("Click on ", style: bodyStyle),
+                      Text("Cliquez sur ", style: bodyStyle),
               Icon(Icons.post_add_outlined),
-              Text(" to post a job", style: bodyStyle),
+              Text(" pour reserver une citte", style: bodyStyle),
             ],
           ),
           decoration: pageDecoration.copyWith(
@@ -84,7 +84,7 @@ class OnBoardingPage  extends GetView<OnboardingController> {
             bodyAlignment: Alignment.bottomCenter,
             imageAlignment: Alignment.topCenter,
           ),
-          image: _buildImage('productivity.jpg'),
+          image: _buildImage('OIP.jpeg'),
           reverse: true,
         ),
       ],
@@ -99,10 +99,10 @@ class OnBoardingPage  extends GetView<OnboardingController> {
         Icons.arrow_back,
         color: Colors.orange,
       ),
-      skip: const Text('Skip',
+      skip: const Text('Passer',
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.orange)),
       next: const Icon(Icons.arrow_forward, color: Colors.orange),
-      done: const Text('Done',
+      done: const Text('Terminé',
           style: TextStyle(fontWeight: FontWeight.w600, color: Colors.orange)),
       curve: Curves.bounceIn, //Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
